@@ -1,4 +1,4 @@
-# DOSNES
+# R-DOSNES
 DOSNES is a new method to visualize your data.
 
 This is an R implementation of the method.
