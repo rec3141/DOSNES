@@ -1,10 +1,12 @@
 # DOSNES
 DOSNES is a new method to visualize your data.
 
-## Project Page
+This is an R implementation of the method.
+
+## Original DOSNES Project Page
 http://yaolubrain.github.io/dosnes/
 
-## Paper
+## Original DOSNES Paper
 [Doubly Stochastic Neighbor Embedding on Spheres] (http://arxiv.org/abs/1609.01977) <br>
 Yao Lu\*, Zhirong Yang\*, Jukka Corander <br>
 (*equal contribution)
@@ -13,33 +15,29 @@ Yao Lu\*, Zhirong Yang\*, Jukka Corander <br>
 Here is a simple example. 
 ``` 
 % Generate data and its similarity matrix
-X = randn(1000,10);
-D = pdist2(X,X,'squaredeuclidean');
-P = exp(-D);
+X = matrix(runif(10000),100)
+D = dist(X)
+P = exp(-D)
+P = as.matrix(P)
 
 % Normalize the similarity matrix to be doubly stochastic by Sinkhorn-Knopp method
-for i = 1:100
-    P = bsxfun(@rdivide,P,sum(P,1));
-    P = bsxfun(@rdivide,P,sum(P,2));
-end    
+for(i in 1:100) {
+    P = P/rowSums(P)
+    P = P %*% diag(1/colSums(P))
+}
+
 
 % Run t-SNE with the spherical constraint
-Y = tsne_p_sphere(P);
+Y = tsne_spher(P);
 
 % Normalize Y to have unity radius for visualization
-Y = bsxfun(@rdivide,Y,sqrt(sum(Y.^2,2)));
+Z = Y/sqrt(rowSums(Y^2))
 
-% Save the data 
-dosnes_data = [Y ones(length(Y),1) 5*ones(length(Y),1)];
-csvwrite('data.csv',dosnes_data);
+#visualize on a sphere
+library(rgl)
+rgl.spheres(c(0,0,0),col="blue",lit=F)
+rgl.points(Z)
+
 ``` 
 
-Now open `dosnes.html` with Firefox. Don't use Chrome. You now have the DOSNES visualization in your browser.
-
-<img src="img/dosnes_example.png" width="500">
-
-For visualizations of more features and real world data, please see the `demo` folder. 
-
-In main javascript code of the demos,
-`makeTextSprite()` is to create the facing-to-viewer text labels. In the CSV files, the first three columns are XYZ-coordinates, the forth column is the class label and the last column is the size of the data points.
 
