@@ -1,3 +1,5 @@
+require(tsne)
+
 tsne_spher <-
 function(X, initial_config = NULL, k=3, initial_dims=30, perplexity=30, max_iter = 1000, min_cost=0, epoch_callback=NULL,whiten=TRUE, epoch=100 ){
 	if ('dist' %in% class(X)) {
