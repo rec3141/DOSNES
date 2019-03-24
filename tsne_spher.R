@@ -92,3 +92,4 @@ function(X, initial_config = NULL, k=3, initial_dims=30, perplexity=30, max_iter
 	}
 	ydata
 }
+environment(tsne_spher) <- asNamespace('tsne')
