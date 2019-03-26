@@ -80,10 +80,11 @@ function(X, initial_config = NULL, k=3, initial_dims=30, perplexity=30, max_iter
         ydata = sweep(ydata, 2, colMeans(ydata), "-") #sweep(...,2,...) is row-wise
 
         # matlab: r_mean = mean(sqrt(sum(ydata.^2,2)),1);
-        r_mean = mean(sqrt(rowSums(ydata^2)))
-        
+	rs <- sqrt(rowSums(ydata^2)
+	r_mean = mean(rs)
+	   
         # matlab: ydata = bsxfun(@times, ydata, r_mean./ sqrt(sum(ydata.^2,2)) );
-        ydata = sweep(ydata, 1, r_mean/sqrt(rowSums(ydata^2)), "*")
+	ydata = sweep(ydata, 1, r_mean/rs, "*")
 
 		if (iter == mom_switch_iter) momentum = final_momentum
 
